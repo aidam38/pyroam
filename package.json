@@ -1,0 +1,17 @@
+{
+  "name": "pyroam",
+  "version": "0.0.0",
+  "description": "Python notebooks in Roam",
+  "main": "src/index.ts",
+  "repository": "https://github.com/aidam38/pyroam.git",
+  "author": "Adam Krivka <krivka.adam@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel src/index.ts -o build/main.js",
+    "build": "parcel build src/index.ts -o build/main.js"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "typescript": "^4.2.2"
+  }
+}

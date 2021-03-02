@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pyroam Testbed</title>
+    <script>
+      const q = (query) => {
+        if (query.includes("sibling")) return [[{ uid: "100000001" }]];
+        return [
+          [
+            {
+              string: document
+                .getElementById("100000000")
+                .querySelector("textarea").value,
+            },
+          ],
+        ];
+      };
+      const updateBlock = (data) => {
+        document.getElementById("100000001").querySelector("textarea").value =
+          data.block.string;
+      };
+      window.roamAlphaAPI = { q, updateBlock };
+    </script>
+    <script src="./index.ts"></script>
+  </head>
+  <body>
+    <div id="100000000" class="rm-block__input"><textarea></textarea></div>
+    <div id="100000001" class="rm-block__input"><textarea></textarea></div>
+  </body>
+</html>
