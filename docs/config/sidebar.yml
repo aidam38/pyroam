@@ -1,4 +1,4 @@
 - label: "Pyroam"
   items:
     - label: "Installation"
-      link: "/roam-plugins/pyroam/test"
+      link: "/pyroam/test"
