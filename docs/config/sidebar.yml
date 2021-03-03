@@ -1,2 +1,4 @@
-- label: "Getting started"
-  link: "google.com"
+- label: "Pyroam"
+  items:
+    - label: "Installation"
+      link: "/roam-plugins/pyroam/test"
