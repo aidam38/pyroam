@@ -7,8 +7,8 @@
   "author": "Adam Krivka <krivka.adam@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel src/index.ts -o build/main.js",
-    "build": "parcel build src/index.ts -o build/main.js"
+    "dev": "parcel src/index.ts -o build/pyroam.js",
+    "build": "parcel build src/index.ts -o build/pyroam.js"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.4",
