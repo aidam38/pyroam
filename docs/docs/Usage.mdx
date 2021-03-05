@@ -1,1 +1,28 @@
-<div style="position: relative; padding-bottom: 75%; height: 0;"><iframe src="https://www.loom.com/embed/69d2f0ddd46942ba99f90bb09cf35892" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+---
+title: 'pyroam - Usage'
+---
+
+The main thing you need to know are the two following keybindings:
+
+| Keybinding         | Action           |
+| ------------------ | ---------------- |
+| <Alt+Enter>        | Run current cell and write |
+| <Alt+Shift+Enter>  | Run all cells in *active notebook* and write |
+
+When a codeblock is run, the output is written to the block nested one below it. 
+
+The fastest way to add a Python codeblock in Roam is by typing `/python` and pressing Enter.
+
+## Active notebooks
+
+By default, the current page is the *active notebook*, i.e., when you press <Alt+Shift+Enter>, all blocks on the current page get run and their outputs are written. 
+
+You can designate a smaller portion of the page to be the *active notebook* by referencing the page `[[pyroam/notebook]]` in the parent block, i.e. all blocks nested under this blocks will get run when pressing <Alt+Shift+Enter>, but no other. You can also nest notebooks - the plugin will always run the "smallest" one. 
+
+All variables are shared, it's like if the code blocks were one script.
+
+## Packages
+
+Currently, `numpy`, `matplotlib` and `scipy` get loaded, though `numpy` tends to be buggy and plot generation with `matplotlib` doesn't work yet. 
+
+In the future, the plugin will load all imported packages dynamically (as long as `pyodide`, the underlying Python browser compiler, allows it). 
