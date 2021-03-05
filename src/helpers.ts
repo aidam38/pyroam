@@ -82,7 +82,7 @@ const invertTree = (block, topUid) => {
 
 const mergeTreesByUid = (topBlocks) => {
   var latchOnto = (tree, topBlock) => {
-    var order = parseInt(topBlock.order);
+    var order = parseInt(topBlock.order) || 0;
     if (!tree[order]) {
       tree[order] = topBlock;
       if (topBlock.child) {
@@ -119,8 +119,9 @@ const flatten = (tree) => {
 export const processCodeBlocks = (codeblocks, uid) => {
   var trees = codeblocks.map(codeblock => invertTree(codeblock[0], uid));
   var tree = mergeTreesByUid(trees);
+  console.log(tree)
   var cells = flatten(tree.filter(tr => tr)[0]);
-  cells = cells.filter(cell => cell.string.startsWith("```python"))
+  cells = cells.filter(cell => cell.string && cell.string.startsWith("```python"))
     .map(cell => {
       return {
         uid: cell.uid,

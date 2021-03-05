@@ -64,14 +64,23 @@ export const writeToNestedBlock = async (parentUid, string) => {
 
 export const getUidOfClosestBlockReferencing = async (uid: string, page: string) => {
   //@ts-ignore
-  const results = await window.roamAlphaAPI.q(`[:find 
+  const results = await q(`[:find 
   (pull ?notebookBlock [:block/uid]) 
   :where  [?notebookBlock :block/refs ?pyroamNotebook]
           [?pyroamNotebook :node/title "${page}"]
           [?activeBlock :block/parents ?notebookBlock]
           [?activeBlock :block/uid "${uid}"]]`);
   //@ts-ignore
-  return results[0][0].uid;
+  if (results) return results[0][0].uid;
+  else {
+    const page = await q(`[:find 
+    (pull ?page [:block/uid])
+    :where [?page :node/title]
+           [?activeBlock :block/uid "${uid}"] 
+           [?activeBlock :block/parents ?page]]`)
+
+    return page[0][0].uid;
+  }
 };
 
 export const getAllCodeBlocksNestedUnder = async (topUid) => {

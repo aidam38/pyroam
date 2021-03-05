@@ -228,7 +228,7 @@ var invertTree = function invertTree(block, topUid) {
 
 var mergeTreesByUid = function mergeTreesByUid(topBlocks) {
   var latchOnto = function latchOnto(tree, topBlock) {
-    var order = parseInt(topBlock.order);
+    var order = parseInt(topBlock.order) || 0;
 
     if (!tree[order]) {
       tree[order] = topBlock;
@@ -272,11 +272,12 @@ var processCodeBlocks = function processCodeBlocks(codeblocks, uid) {
     return invertTree(codeblock[0], uid);
   });
   var tree = mergeTreesByUid(trees);
+  console.log(tree);
   var cells = flatten(tree.filter(function (tr) {
     return tr;
   })[0]);
   cells = cells.filter(function (cell) {
-    return cell.string.startsWith("```python");
+    return cell.string && cell.string.startsWith("```python");
   }).map(function (cell) {
     return {
       uid: cell.uid,
@@ -817,20 +818,33 @@ exports.writeToNestedBlock = writeToNestedBlock;
 
 var getUidOfClosestBlockReferencing = function getUidOfClosestBlockReferencing(uid, page) {
   return __awaiter(void 0, void 0, void 0, function () {
-    var results;
+    var results, page_1;
     return __generator(this, function (_a) {
       switch (_a.label) {
         case 0:
           return [4
           /*yield*/
-          , window.roamAlphaAPI.q("[:find \n  (pull ?notebookBlock [:block/uid]) \n  :where  [?notebookBlock :block/refs ?pyroamNotebook]\n          [?pyroamNotebook :node/title \"" + page + "\"]\n          [?activeBlock :block/parents ?notebookBlock]\n          [?activeBlock :block/uid \"" + uid + "\"]]")];
+          , exports.q("[:find \n  (pull ?notebookBlock [:block/uid]) \n  :where  [?notebookBlock :block/refs ?pyroamNotebook]\n          [?pyroamNotebook :node/title \"" + page + "\"]\n          [?activeBlock :block/parents ?notebookBlock]\n          [?activeBlock :block/uid \"" + uid + "\"]]")];
 
         case 1:
-          results = _a.sent(); //@ts-ignore
-
+          results = _a.sent();
+          if (!results) return [3
+          /*break*/
+          , 2];
           return [2
           /*return*/
           , results[0][0].uid];
+
+        case 2:
+          return [4
+          /*yield*/
+          , exports.q("[:find \n    (pull ?page [:block/uid])\n    :where [?page :node/title]\n           [?activeBlock :block/uid \"" + uid + "\"] \n           [?activeBlock :block/parents ?page]]")];
+
+        case 3:
+          page_1 = _a.sent();
+          return [2
+          /*return*/
+          , page_1[0][0].uid];
       }
     });
   });
