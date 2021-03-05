@@ -1,8 +1,8 @@
 - label: "📓 pyroam"
   items:
     - label: "Installation"
-      link: "pyroam/"
+      link: "pyroam/installation"
     - label: "Usage"
-      link: "pyroam/Usage"
+      link: "pyroam/usage"
     - label: "Reporting bugs & Contributing"
-      link: "pyroam/Contributing"
+      link: "pyroam/contributing"
