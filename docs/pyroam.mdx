@@ -4,7 +4,7 @@ title: "Pyroam - Python notebooks in Roam Research"
 
 ![pyroam gif](/roam-plugins/assets/pyroam.gif)
 
-# Installation
+## Installation
 
 To install this plugin, **click** on the "*Copy extension*." button below, **paste** somewhere in your graph and **click** the "*Yes, I know what I'm doing.*" button.
 
@@ -15,7 +15,7 @@ To install this plugin, **click** on the "*Copy extension*." button below, **pas
 
 (*Warning*: The above method might not work in not Chrome-based browsers, in which case you should follow the manual installation below.)
 
-## Manual installation
+### Manual installation
 
 **Copy** the following snippet and **paste** somewhere in your graph.
 
@@ -49,7 +49,7 @@ var pyroam = document.createElement('script');
 document.getElementsByTagName('head')[0].appendChild(pyroam);
 ```
 
-# Usage
+## Usage
 
 The main thing you need to know are the two following keybindings:
 
@@ -62,7 +62,7 @@ When a codeblock is run, the output is written to the block nested one below it.
 
 The fastest way to add a Python codeblock in Roam is by typing `/python` and pressing Enter.
 
-## Active notebooks
+### Active notebooks
 
 By default, the current page is the *active notebook*, i.e., when you press <Alt+Shift+Enter>, all blocks on the current page get run and their outputs are written. 
 
@@ -70,12 +70,12 @@ You can designate a smaller portion of the page to be the *active notebook* by r
 
 All variables are shared, it's like if the code blocks were one script.
 
-## Packages
+### Packages
 
 Currently, `numpy`, `matplotlib` and `scipy` get loaded, though `numpy` tends to be buggy and plot generation with `matplotlib` doesn't work yet. 
 
 In the future, the plugin will load all imported packages dynamically (as long as `pyodide`, the underlying Python browser compiler, allows it). 
 
 
-# Bug reports & Contributing
+## Bug reports & Contributing
 You can create issues or pull requests in the [repository](https://github.com/aidam38/pyroam) or DM me on Twitter (https://twitter.com/adam_krivka)
