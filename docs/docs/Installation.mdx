@@ -1,0 +1,40 @@
+# Installation
+
+To install this plugin, **click** on the "Copy code." button below, **paste** somewhere in your graph and **click** the "Yes, I know what I'm doing." button.
+
+
+Warning: The above method might not work in not Chrome-based browsers, in which case you should follow the manual installation below.
+
+## Manual installation
+
+**Copy** the following code and **paste** somewhere in your graph.
+
+```js
+- {{[[roam/js]]}}
+    - ```js```
+```
+
+It should create a code block. Into the code block, paste the following code:
+
+```js
+/** pyroam - Python notebooks in Roam
+ *  Author: Adam Krivka
+ *  Docs: https://adamkrivka.com/roam-plugins/pyroam
+ */
+
+window.pyroamSettings = {
+  /** There might some important settings here in the future,
+   *   make sure to check the docs once in a while.
+   */
+}
+
+var pyroamID = "pyroam-script";
+var oldPyroam = document.getElementById(pyroamID);
+if (oldPyroam) oldPyroam.remove();
+var pyroam = document.createElement('script');
+	pyroam.type = "text/javascript";
+	pyroam.id = pyroamID;
+	pyroam.src =  "http://localhost:1234/pyroam.js";
+  	pyroam.async = true;
+document.getElementsByTagName('head')[0].appendChild(pyroam);
+```

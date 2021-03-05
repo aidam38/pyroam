@@ -1,0 +1,30 @@
+//@ts-nocheck
+const writeToNextBlock = async (uid, string) => {
+    if (!string) return;
+    const query = `
+  [:find 
+    (pull ?block 
+        [:block/order 
+        {:block/_children 
+            [:block/uid 
+            {:block/children [:block/uid :block/order]}]}])
+   :where
+    [?block :block/uid "${uid}"]]`;
+
+    const result = await q(query);
+    if (!result) console.log("Couldn't find the block.");
+
+    var block = result[0][0];
+    var parent = block._children[0];
+    var siblings = parent.children;
+
+    if (!siblings.some((sibling) => sibling.order > block.order)) {
+        const newUid = createUid();
+        createBlock(parent.uid, block.order + 1, newUid, string);
+    } else {
+        const nextSibling = siblings.filter(
+            (sibling) => sibling.order === block.order + 1
+        )[0];
+        updateBlock(nextSibling.uid, string);
+    }
+}

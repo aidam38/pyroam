@@ -1,4 +1,4 @@
-import { createUid } from "./helpers";
+import { createUid, processCodeBlocks } from "./helpers";
 
 /* === WRAPPERS === */
 export const q = async (query) => {
@@ -34,31 +34,54 @@ export const createBlock = async (parentUid, order, uid, string) => {
 };
 
 /* === COMPOSITE FUNCTIONS === */
-export const writeToNextBlock = async (uid, string) => {
+export const getBlockStringByUid = async (uid) => {
+  const query = `[:find (pull ?block [:block/string])
+         :where [?block :block/uid "${uid}"]]`;
+  const result = await q(query);
+
+  return result[0][0].string;
+}
+export const writeToNestedBlock = async (parentUid, string) => {
+  if (!string) return;
+
   const query = `
   [:find 
-    (pull ?block 
-        [:block/order 
-        {:block/_children 
-            [:block/uid 
-            {:block/children [:block/uid :block/order]}]}])
+    (pull ?nestedBlock 
+        [:block/uid])
    :where
-    [?block :block/uid "${uid}"]]`;
+    [?parentBlock :block/uid "${parentUid}"]
+    [?parentBlock :block/children ?nestedBlock]]`;
 
   const result = await q(query);
-  if (!result) console.log("Couldn't find the block.");
-
-  var block = result[0][0];
-  var parent = block._children[0];
-  var siblings = parent.children;
-
-  if (!siblings.some((sibling) => sibling.order > block.order)) {
-    const newUid = createUid();
-    createBlock(parent.uid, block.order + 1, newUid, string);
+  if (!result) {
+    const nestedUid = createUid();
+    createBlock(parentUid, 0, nestedUid, string);
   } else {
-    const nextSibling = siblings.filter(
-      (sibling) => sibling.order === block.order + 1
-    )[0];
-    updateBlock(nextSibling.uid, string);
+    const nestedUid = result[0][0].uid;
+    updateBlock(nestedUid, string);
   }
+};
+
+export const getUidOfClosestBlockReferencing = async (uid: string, page: string) => {
+  //@ts-ignore
+  const results = await window.roamAlphaAPI.q(`[:find 
+  (pull ?notebookBlock [:block/uid]) 
+  :where  [?notebookBlock :block/refs ?pyroamNotebook]
+          [?pyroamNotebook :node/title "${page}"]
+          [?activeBlock :block/parents ?notebookBlock]
+          [?activeBlock :block/uid "${uid}"]]`);
+  //@ts-ignore
+  return results[0][0].uid;
+};
+
+export const getAllCodeBlocksNestedUnder = async (topUid) => {
+  //@ts-ignore
+  var results = await window.roamAlphaAPI.q('[:find\
+    (pull ?cell [:block/string :block/order :block/uid {:block/_children ...}])\
+    :where  [?notebookBlock :block/uid "' + topUid + '"]\
+            [?cell :block/parents ?notebookBlock]\
+            [?cell :block/string ?string]\
+            [(clojure.string/starts-with? ?string "```python")]]');
+  const cells = processCodeBlocks(results, topUid);
+  return cells;
 };

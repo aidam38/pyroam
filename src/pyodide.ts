@@ -41,10 +41,11 @@ def run_code(code):
     "scipy",
   ]);
   console.log("Loaded packages: ");
-  console.log(pyodide.loadedPackages;
+  console.log(pyodide.loadedPackages);
 };
 
 export const runPython = async (code) => {
+  if (!code) return;
   pyodide.globals.code_to_run = code;
   var out = await pyodide.runPythonAsync("run_code(code_to_run)");
   return out;
