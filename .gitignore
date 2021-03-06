@@ -1,4 +1,4 @@
 .cache
 .vscode
+coverage
 node_modules
-
