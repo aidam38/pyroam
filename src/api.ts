@@ -1,8 +1,8 @@
-import { createUid, processCodeBlocks } from "./helpers";
+import {processCodeBlocks} from "./helpers"
+import {createBlock} from "roam-client"
 
 /* === WRAPPERS === */
 export const q = async (query) => {
-  //@ts-ignore
   const result = await window.roamAlphaAPI.q(query);
   if (!result || result.length === 0) {
     return null;
@@ -10,22 +10,7 @@ export const q = async (query) => {
 };
 
 export const updateBlock = async (uid, string) => {
-  //@ts-ignore
   await window.roamAlphaAPI.updateBlock({
-    block: {
-      uid: uid,
-      string: string,
-    },
-  });
-};
-
-export const createBlock = async (parentUid, order, uid, string) => {
-  //@ts-ignore
-  await window.roamAlphaAPI.createBlock({
-    location: {
-      "parent-uid": parentUid,
-      order: order,
-    },
     block: {
       uid: uid,
       string: string,
@@ -54,11 +39,14 @@ export const writeToNestedBlock = async (parentUid, string) => {
 
   const result = await q(query);
   if (!result) {
-    const nestedUid = createUid();
-    createBlock(parentUid, 0, nestedUid, string);
+    createBlock({
+      node: {text: string},
+      parentUid,
+      order: 0
+    })
   } else {
     const nestedUid = result[0][0].uid;
-    updateBlock(nestedUid, string);
+    return updateBlock(nestedUid, string);
   }
 };
 
@@ -84,13 +72,11 @@ export const getUidOfClosestBlockReferencing = async (uid: string, page: string)
 };
 
 export const getAllCodeBlocksNestedUnder = async (topUid) => {
-  //@ts-ignore
-  var results = await window.roamAlphaAPI.q('[:find\
+  const results = await window.roamAlphaAPI.q('[:find\
     (pull ?cell [:block/string :block/order :block/uid {:block/_children ...}])\
     :where  [?notebookBlock :block/uid "' + topUid + '"]\
             [?cell :block/parents ?notebookBlock]\
             [?cell :block/string ?string]\
-            [(clojure.string/starts-with? ?string "```python")]]');
-  const cells = processCodeBlocks(results, topUid);
-  return cells;
+            [(clojure.string/starts-with? ?string "```python")]]')
+  return processCodeBlocks(results, topUid);
 };
