@@ -1,4 +1,5 @@
 /* ====== BASIC ======= */
+
 export const sleep = (m) => {
   var t = m ? m : 10;
   return new Promise((r) => setTimeout(r, t));
@@ -20,11 +21,15 @@ export const addScriptToPage = (tagId, script) => {
   );
 };
 
+export function getActiveRoamInputElement() {
+  const el = document.activeElement
+  return el.closest(".rm-block__input")
+}
+
 export const getActiveBlockUid = () => {
-  const el = document.activeElement;
-  const uid = el.closest(".rm-block__input").id.slice(-9);
-  return uid;
-};
+  const roamInput = getActiveRoamInputElement()
+  return roamInput.id.slice(-9)
+}
 
 export const removeBackticks = (str: string) => {
   var ttt = "``" + "`";

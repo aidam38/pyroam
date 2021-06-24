@@ -1,5 +1,5 @@
 import {processCodeBlocks} from "./helpers"
-import {createBlock} from "roam-client"
+import {createBlock, getOrderByBlockUid, getParentUidByBlockUid} from "roam-client"
 
 /* === WRAPPERS === */
 export const q = async (query) => {
@@ -80,3 +80,20 @@ export const getAllCodeBlocksNestedUnder = async (topUid) => {
             [(clojure.string/starts-with? ?string "```python")]]')
   return processCodeBlocks(results, topUid);
 };
+
+export async function createNextPythonBlock(activeUid: string) {
+  // todo generate hiccup for displaying complex things?
+  // todo interactive output
+  // todo proper click on the new code block
+
+  const order = getOrderByBlockUid(activeUid) + 1
+  const newUuid = createBlock({
+    node: {
+      text: "```python\n```",
+    },
+    parentUid: getParentUidByBlockUid(activeUid),
+    order,
+  })
+
+  console.log("Created new python block:", newUuid)
+}
