@@ -4,3 +4,4 @@ yarn.lock
 coverage
 node_modules
 .idea
+dist

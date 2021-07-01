@@ -1,6 +1,7 @@
 import {getActiveBlockUid, getActiveCodeBlockContent as getActiveCodeBlockContent} from "./helpers"
 import {getAllCodeBlocksNestedUnder, getUidOfClosestBlockReferencing, writeToNestedBlock} from "./api"
 import {runPython} from "./pyodide"
+import {CellRunner} from "./observable"
 
 
 const runAllBlocksBelowUidAndWrite = async (notebookUid) => {
@@ -15,14 +16,18 @@ const runAllBlocksBelowUidAndWrite = async (notebookUid) => {
     }
 }
 
+const cellRunner = new CellRunner()
 /**
  * Runs only the active cell
  */
 export const runActiveBlockAndWriteToNext = async () => {
     const activeUid = getActiveBlockUid()
     const code = getActiveCodeBlockContent()
-    const out = await runPython(code)
-    await writeToNestedBlock(activeUid, out)
+    const out = await cellRunner.run(code, activeUid, (out: string) => {
+        console.log("trying to write a child of ", activeUid, out)
+        return writeToNestedBlock(activeUid, out)
+    })
+    // await writeToNestedBlock(activeUid, out)
 }
 
 /**
