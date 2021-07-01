@@ -1,4 +1,5 @@
 /* ====== BASIC ======= */
+
 export const sleep = (m) => {
   var t = m ? m : 10;
   return new Promise((r) => setTimeout(r, t));
@@ -20,32 +21,15 @@ export const addScriptToPage = (tagId, script) => {
   );
 };
 
-export const createUid = () => {
-  // From roam42 based on https://github.com/ai/nanoid#js version 3.1.2
-  let nanoid = (t = 21) => {
-    let e = "",
-      r = crypto.getRandomValues(new Uint8Array(t));
-    for (; t--;) {
-      let n = 63 & r[t];
-      e +=
-        n < 36
-          ? n.toString(36)
-          : n < 62
-            ? (n - 26).toString(36).toUpperCase()
-            : n < 63
-              ? "_"
-              : "-";
-    }
-    return e;
-  };
-  return nanoid(9);
-};
+export function getActiveRoamInputElement() {
+  const el = document.activeElement
+  return el.closest(".rm-block__input")
+}
 
 export const getActiveBlockUid = () => {
-  const el = document.activeElement;
-  const uid = el.closest(".rm-block__input").id.slice(-9);
-  return uid;
-};
+  const roamInput = getActiveRoamInputElement()
+  return roamInput.id.slice(-9)
+}
 
 export const removeBackticks = (str: string) => {
   var ttt = "``" + "`";
