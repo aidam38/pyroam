@@ -53,18 +53,8 @@ export const removeBackticks = (str: string) => {
 }
 
 /* ======== CODEBLOCK PROCESSING ======= */
-export const processRawHtml = (rawHtml: string) => {
-  const withNewLines = rawHtml
-    .replace(/<div class="CodeMirror-linenumber.*?<\/div>/gm, "\n")
-
-  const output = new DOMParser().parseFromString(withNewLines, "text/html").documentElement.textContent.replace(/\u200B/g, "");
-  return output.slice(1);
-}
-
 export const getActiveCodeBlockContent = () => {
-  const el = document.activeElement;
-  const rawHtml = el.parentElement.parentElement.querySelector(".CodeMirror-code").outerHTML;
-  return processRawHtml(rawHtml);
+  return document.activeElement.outerText;
 }
 
 /* ====== TREE PARSERS ====== */
