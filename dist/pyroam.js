@@ -780,6 +780,7 @@ var writeToNestedBlock = function writeToNestedBlock(parentUid, string) {
           if (!string) return [2
           /*return*/
           ];
+          string = string.trim();
           query = "\n  [:find \n    (pull ?nestedBlock \n        [:block/uid])\n   :where\n    [?parentBlock :block/uid \"".concat(parentUid, "\"]\n    [?parentBlock :block/children ?nestedBlock]]");
           return [4
           /*yield*/

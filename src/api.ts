@@ -44,6 +44,8 @@ export const getBlockStringByUid = async (uid) => {
 export const writeToNestedBlock = async (parentUid, string) => {
   if (!string) return;
 
+  string = string.trim();
+
   const query = `
   [:find 
     (pull ?nestedBlock 
